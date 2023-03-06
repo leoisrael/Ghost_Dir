@@ -1,5 +1,5 @@
 <h1>Ghost_Dir</h1>
-<img src="https://64.media.tumblr.com/f0fa43ee83285972d0f26ef8b1d1f1ce/tumblr_my0ckoNrhF1rkrwg5o1_400.gif" alt="descrição_do_gif">
+<img align="center" src="https://64.media.tumblr.com/f0fa43ee83285972d0f26ef8b1d1f1ce/tumblr_my0ckoNrhF1rkrwg5o1_400.gif" alt="descrição_do_gif">
 
   <p>Ghost_Dir is a web exploration tool developed in Node.js. It is capable of detecting hidden subdirectories on a web page, allowing information security professionals to perform penetration tests more efficiently and discreetly.</p>
   <p>Ghost_Dir is part of the Ghost ecosystem, which includes several other web exploration tools built in Node.js. All of these tools were created to help professionals in the field perform their tests safely and efficiently.</p>
