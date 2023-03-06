@@ -1,0 +1,34 @@
+{
+  "name": "ghost_dir",
+  "version": "0.0.1",
+  "description": "Just like a ghost, Ghost_Dir is capable of detecting hidden subdirectories that other scanning tools may not be able to find. It acts silently, without leaving any traces, and is able to penetrate into obscure areas of the web page that usually go unnoticed.",
+  "main": "index.js",
+  "bin": "index.js",
+  "pkg": {
+    "assets":[
+      "./**/*"
+    ],
+    "target":[
+      "node7"
+    ]
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./build.sh",
+    "install": "./install.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leoisrael/Ghost_Dir.git"
+  },
+  "author": "israel albuquerque",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leoisrael/Ghost_Dir/issues"
+  },
+  "homepage": "https://github.com/leoisrael/Ghost_Dir#readme",
+  "dependencies": {
+    "chalk": "^3.0.0-beta.2",
+    "commander": "^10.0.0"
+  }
+}
