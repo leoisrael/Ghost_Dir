@@ -12,20 +12,10 @@ program
   .option('<wordlist>')
   .description('diz olá com um nome')
   .action((target, wordlist) => {
-    let result = bruteForce(target, wordlist)
+    const result = target ? `o ip do seu alvo: ${target}` : 'bad request';
     console.log(chalk.green(
-        result
+      result
     ));
-});
+  });
 
 program.parse(process.argv);
-
-//funcoes
-
-function bruteForce(target, wordlist){
-    if(target){
-      return `o ip do seu alvo: ${target}`
-    } else {
-      return 'bad request'
-    }
-}
