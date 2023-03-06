@@ -12,18 +12,7 @@ program
   .command('brute <target>')
   .option('<wordlist>')
   .description('diz olá com um nome')
-  .action((target, wordlist) => {
-    const result = target ? `o ip do seu alvo: ${target}` : 'bad request';
-    console.log(chalk.green(
-      result
-    ));
-  });
-
-program
-  .command('brute <target>')
-  .option('<wordlist>')
-  .description('diz olá com um nome')
-  .action((target, wordlist) => {
+  .action((target) => {
     const result = target ? `o ip do seu alvo: ${target}` : 'bad request';
     console.log(chalk.green(
       result
@@ -38,8 +27,7 @@ program
     // Executa o comando de ping com o número de pacotes especificado
     exec(`ping -c ${opcoes.count} ${endereco}`, (erro, stdout, stderr) => {
       if (erro) {
-        console.error(`Ocorreu um erro ao executar o comando de ping: ${erro}`);
-        return;
+        throw `Ocorreu um erro ao executar o comando de ping: ${erro}`;
       }
 
       console.log(stdout);
