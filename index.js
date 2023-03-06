@@ -23,5 +23,9 @@ program.parse(process.argv);
 //funcoes
 
 function bruteForce(target, wordlist){
-    return `o ip do seu alvo: ${target}`
+    if(target){
+      return `o ip do seu alvo: ${target}`
+    } else {
+      return 'bad request'
+    }
 }
