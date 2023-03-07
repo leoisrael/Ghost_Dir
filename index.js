@@ -14,49 +14,43 @@ program
   .command('brute <target> <wordlist>')
   .description('diz olá com um nome')
   .action(async (target, wordlist) => {
-    let result = await bruteForce(target, wordlist);
-    console.log(chalk.green(result));
+    await bruteForce(target, wordlist);
   });
 
 program.parse(process.argv);
 
 //functions
 
-const urlRegex = /^https?:\/\//;
+
 
 async function bruteForce(target, wordlist) {
+  let urlRegex = /^https?:\/\//;
+
   if (!urlRegex.test(target)) {
     target = `http://${target}`;
   }
-  console.log(target);
-  console.log(wordlist);
-  
+
   if (!fs.existsSync(wordlist)) {
     throw new Error(`O arquivo ${wordlist} não existe.`);
   }
-  
+
   const subdiretorios = fs.readFileSync(wordlist, 'utf-8').split('\n')
     .filter(subdir => subdir.trim() !== '');
-  
-  const diretoriosExistentes = [];
 
+  
+  const numSubdirectories = subdiretorios.length;
+  console.log(`There will be ${numSubdirectories} subdirectories tested.`);
   for (let i = 0; i < subdiretorios.length; i++) {
     const subdir = subdiretorios[i];
-    if (!/^[a-zA-Z0-9_-]+$/.test(subdir)) {
-      console.error(`O subdiretório ${subdir} contém caracteres inválidos.`);
-      continue;
-    }
     try {
       const response = await fetch(`${target}/${subdir}`, { timeout: 5000 });
-      if (response.status === 200) {
-        diretoriosExistentes.push(subdir);
+      if (response.status !== 404) {
+        console.log(chalk.green(`===> ${subdir}`))
       }
       await new Promise(resolve => setTimeout(resolve, 100));
     } catch (error) {
       console.error(`Erro ao fazer solicitação para ${target}/${subdir}: ${error.message}`);
     }
   }
-
-  return diretoriosExistentes.join('\n');
 }
 
