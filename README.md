@@ -17,6 +17,25 @@
 </ul>
 <h2 style="color: #EBC5D5; font-size: 2em;">🔧 How to use</h2>
 <p style="color: white; font-size: 1.2em;">👨‍💻 Ghost_Dir is still under development and will soon be available as an open-source tool. To use it, simply clone the project repository and follow the installation and usage instructions.</p>
+<h2 style="color: #EBC5D5; font-size: 2em;">🔧 How to install</h2>
+<p style="color: white; font-size: 1.2em;">To install Ghost_Dir, you can use the provided installation script, which will install Ghost_Dir on your system and give permission for it to be executed.</p>
+<p style="color: white; font-size: 1.2em;">To install, follow these steps:</p>
+<ol style="color: white; font-size: 1.2em;">
+    <li>Download the project or clone the repository.</li>
+    <li>Open the terminal in the project root folder.</li>
+    <li>Give permission for the installation script to be executed with the command:</li>
+    <code>chmod +x install.sh</code>
+    <li>Execute the installation script:</li>
+    <code>./install.sh</code>
+    <li>After installation, Ghost_Dir will be available in the terminal as "ghostdir".</li>
+</ol>
+<p style="color: white; font-size: 1.2em;">For the development environment, you can build the project with npm, generating a rebuilt binary in the project folder. Then, you can install the binary using the command:</p>
+<code>npm run build</code>
+<code>npm run install</code>
+<p style="color: white; font-size: 1.2em;">These instructions should help you install and start using Ghost_Dir in your project.</p>
+
+![screen](https://user-images.githubusercontent.com/34001403/223876699-b5a3831b-35bb-4c6c-ba3d-4a40d6b4a5c5.png)
+
 <h2 style="color: #EBC5D5; font-size: 2em;">🤝 Contributing</h2>
 <p style="color: white; font-size: 1.2em;">👻 Ghost_Dir is an open-source tool, and we welcome contributions from the community. If you would like to help improve the tool with bug fixes, new features, or other enhancements, please submit a pull request to the project repository.</p>
 <h2 style="color: #EBC5D5; font-size: 2em;">📧 Contact</h2>
