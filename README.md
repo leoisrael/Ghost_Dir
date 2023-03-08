@@ -33,6 +33,9 @@
 <code>npm run build</code>
 <code>npm run install</code>
 <p style="color: white; font-size: 1.2em;">These instructions should help you install and start using Ghost_Dir in your project.</p>
+
+![screen](https://user-images.githubusercontent.com/34001403/223876699-b5a3831b-35bb-4c6c-ba3d-4a40d6b4a5c5.png)
+
 <h2 style="color: #EBC5D5; font-size: 2em;">🤝 Contributing</h2>
 <p style="color: white; font-size: 1.2em;">👻 Ghost_Dir is an open-source tool, and we welcome contributions from the community. If you would like to help improve the tool with bug fixes, new features, or other enhancements, please submit a pull request to the project repository.</p>
 <h2 style="color: #EBC5D5; font-size: 2em;">📧 Contact</h2>
