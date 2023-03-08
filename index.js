@@ -8,7 +8,7 @@ const fetch = require('node-fetch');
 
 program
   .version('0.0.1')
-  .description('Um aplicativo de terminal simples em NodeJS');
+  .description(chalk.green(`Um aplicativo de terminal simples em NodeJS`));
 
 program
   .command('brute <target> <wordlist>')
@@ -20,8 +20,6 @@ program
 program.parse(process.argv);
 
 //functions
-
-
 
 async function bruteForce(target, wordlist) {
   let urlRegex = /^https?:\/\//;
@@ -37,7 +35,7 @@ async function bruteForce(target, wordlist) {
   const subdiretorios = fs.readFileSync(wordlist, 'utf-8').split('\n')
     .filter(subdir => subdir.trim() !== '');
 
-  
+
   const numSubdirectories = subdiretorios.length;
   console.log(`There will be ${numSubdirectories} subdirectories tested.`);
   for (let i = 0; i < subdiretorios.length; i++) {
