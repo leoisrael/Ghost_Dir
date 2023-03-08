@@ -1,54 +1,121 @@
 #!/usr/bin/env node
 
-const { program } = require('commander');
+const { Command } = require('commander');
 const chalk = require('chalk');
-const { exec } = require('child_process');
-const fs = require('fs');
+const fs = require('fs').promises;
 const fetch = require('node-fetch');
 
+const program = new Command();
+
 program
+  .name("Ghost_Dir")
   .version('0.0.1')
-  .description(chalk.green(`Um aplicativo de terminal simples em NodeJS`));
+  .description(chalk.red(`
+       @@@@@@@@  @@@  @@@   @@@@@@    @@@@@@   @@@@@@@     @@@@@@@   @@@  @@@@@@@   
+      @@@@@@@@@  @@@  @@@  @@@@@@@@  @@@@@@@   @@@@@@@     @@@@@@@@  @@@  @@@@@@@@  
+      !@@        @@!  @@@  @@!  @@@  !@@         @@!       @@!  @@@  @@!  @@!  @@@  
+      !@!        !@!  @!@  !@!  @!@  !@!         !@!       !@!  @!@  !@!  !@!  @!@  
+      !@! @!@!@  @!@!@!@!  @!@  !@!  !!@@!!      @!!       @!@  !@!  !!@  @!@!!@!   
+      !!! !!@!!  !!!@!!!!  !@!  !!!   !!@!!!     !!!       !@!  !!!  !!!  !!@!@!    
+      :!!   !!:  !!:  !!!  !!:  !!!       !:!    !!:       !!:  !!!  !!:  !!: :!!   
+      :!:   !::  :!:  !:!  :!:  !:!      !:!     :!:       :!:  !:!  :!:  :!:  !:!  
+       ::: ::::  ::   :::  ::::: ::  :::: ::      ::       :::: ::    ::  ::   :::  
+       :: :: :    :   : :   : :  :   :: : :       :        :: :  :   :     :   : :  
+                                                                               
+       Developed by Israel_Albuquerque
+       GitHub https://github.com/leoisrael
+
+  `));
 
 program
   .command('brute <target> <wordlist>')
-  .description('diz olá com um nome')
-  .action(async (target, wordlist) => {
-    await bruteForce(target, wordlist);
-  });
-
-program.parse(process.argv);
-
-//functions
-
-async function bruteForce(target, wordlist) {
-  let urlRegex = /^https?:\/\//;
-
-  if (!urlRegex.test(target)) {
-    target = `http://${target}`;
-  }
-
-  if (!fs.existsSync(wordlist)) {
-    throw new Error(`O arquivo ${wordlist} não existe.`);
-  }
-
-  const subdiretorios = fs.readFileSync(wordlist, 'utf-8').split('\n')
-    .filter(subdir => subdir.trim() !== '');
-
-
-  const numSubdirectories = subdiretorios.length;
-  console.log(`There will be ${numSubdirectories} subdirectories tested.`);
-  for (let i = 0; i < subdiretorios.length; i++) {
-    const subdir = subdiretorios[i];
+  .description('Scan subdirectories on a web page')
+  .option('-c, --concurrency <num>', 'Number of parallel requests', 10)
+  .option('-t, --timeout <ms>', 'Timeout for each request (in milliseconds)', 5000)
+  .action(async (target, wordlist, options) => {
     try {
-      const response = await fetch(`${target}/${subdir}`, { timeout: 5000 });
-      if (response.status !== 404) {
-        console.log(chalk.green(`===> ${subdir}`))
-      }
-      await new Promise(resolve => setTimeout(resolve, 100));
+      const subdirectories = await getSubdirectories(wordlist);
+      const results = await scanSubdirectories(target, subdirectories, options);
+      printResults(results);
     } catch (error) {
-      console.error(`Erro ao fazer solicitação para ${target}/${subdir}: ${error.message}`);
+      console.error(chalk.red(`Error: ${error.message}`));
+      process.exit(1);
     }
+});
+
+
+async function getSubdirectories(wordlistPath) {
+  try {
+    const wordlistContent = await fs.readFile(wordlistPath, 'utf-8');
+    return wordlistContent.trim().split('\n');
+  } catch (error) {
+    console.error(chalk.red(`Erro ao ler o arquivo de wordlist: ${error.message}`));
+    process.exit(1);
   }
 }
 
+async function scanSubdirectories(targetUrl, subdirectories, options) {
+  const validSubdirectories = [];
+  const invalidSubdirectories = [];
+  const failedSubdirectories = [];
+
+  const urlRegex = /^https?:\/\//;
+  if (!urlRegex.test(targetUrl)) {
+    targetUrl = `http://${targetUrl}`;
+  }
+
+  const requests = subdirectories.map((subdir) => {
+    const url = `${targetUrl}/${subdir}`;
+    return fetch(url, { timeout: options.timeout })
+      .then((response) => {
+        if (response.status === 404) {
+          invalidSubdirectories.push(url);
+        } else {
+          validSubdirectories.push(url);
+        }
+      })
+      .catch((error) => {
+        failedSubdirectories.push({ url, error: error.message });
+      });
+  });
+
+  try {
+    await Promise.all(requests);
+  } catch (error) {
+    console.error(chalk.red(`Erro na varredura de subdiretórios: ${error.message}`));
+    process.exit(1);
+  }
+
+  if (failedSubdirectories.length > 0) {
+    console.warn(chalk.yellow('Algumas solicitações falharam:'));
+    failedSubdirectories.forEach(({ url, error }) => {
+      console.warn(chalk.red(`==> ${url} (${error})`));
+    });
+  }
+
+  return { validSubdirectories, invalidSubdirectories, failedSubdirectories };
+}
+
+
+function printResults({ validSubdirectories, invalidSubdirectories, failedSubdirectories }) {
+  console.log(`Iniciando varredura de subdiretórios em ${targetUrl} (${validSubdirectories.length + invalidSubdirectories.length} subdiretórios encontrados)...`);
+  
+  console.log(chalk.green(`Varredura concluída: ${validSubdirectories.length} subdiretórios encontrados.`));
+
+  if (validSubdirectories.length > 0) {
+    console.log(chalk.yellow('Subdiretórios válidos:'));
+    validSubdirectories.forEach((url) => console.log(chalk.green(`==> ${url}`)));
+  }
+
+  if (invalidSubdirectories.length > 0) {
+    console.log(chalk.yellow('Subdiretórios inválidos (404):'));
+    invalidSubdirectories.forEach((url) => console.log(chalk.gray(`==> ${url}`)));
+  }
+
+  if (failedSubdirectories.length > 0) {
+    console.log(chalk.yellow('Subdiretórios com falha:'));
+    failedSubdirectories.forEach((result) => console.log(chalk.red(`==> ${result.url} (${result.error})`)));
+  }
+}
+
+program.parse(process.argv);
