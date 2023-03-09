@@ -54,7 +54,10 @@ async function getSubdirectories(wordlistPath) {
   }
 }
 
+let targetUrlGlobal
+
 async function scanSubdirectories(targetUrl, subdirectories, options) {
+  targetUrlGlobal = targetUrl
   const validSubdirectories = [];
   const invalidSubdirectories = [];
   const failedSubdirectories = [];
@@ -98,22 +101,22 @@ async function scanSubdirectories(targetUrl, subdirectories, options) {
 
 
 function printResults({ validSubdirectories, invalidSubdirectories, failedSubdirectories }) {
-  console.log(`Iniciando varredura de subdiretórios em ${targetUrl} (${validSubdirectories.length + invalidSubdirectories.length} subdiretórios encontrados)...`);
-  
-  console.log(chalk.green(`Varredura concluída: ${validSubdirectories.length} subdiretórios encontrados.`));
+  console.log(`Starting subdirectory scan on ${targetUrlGlobal} (${validSubdirectories.length + invalidSubdirectories.length} subdirectories found)...`);
+
+  console.log(chalk.green(`Scan completed: ${validSubdirectories.length} subdirectories found.`));
 
   if (validSubdirectories.length > 0) {
-    console.log(chalk.yellow('Subdiretórios válidos:'));
+    console.log(chalk.yellow('Valid subdirectories:'));
     validSubdirectories.forEach((url) => console.log(chalk.green(`==> ${url}`)));
   }
 
   if (invalidSubdirectories.length > 0) {
-    console.log(chalk.yellow('Subdiretórios inválidos (404):'));
+    console.log(chalk.yellow('Invalid subdirectories(404):'));
     invalidSubdirectories.forEach((url) => console.log(chalk.gray(`==> ${url}`)));
   }
 
   if (failedSubdirectories.length > 0) {
-    console.log(chalk.yellow('Subdiretórios com falha:'));
+    console.log(chalk.yellow('Failed subdirectories:'));
     failedSubdirectories.forEach((result) => console.log(chalk.red(`==> ${result.url} (${result.error})`)));
   }
 }
