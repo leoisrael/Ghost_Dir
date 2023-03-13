@@ -1,4 +1,4 @@
-<h1 style="color: #EBC5D5; text-align: center; font-size: 3em;">👻 Ghost_Dir</h1>
+<h1 style="color: #EBC5D5; text-align: center; font-size: 3em;">👻 Ghost_Dir</h1> 
 <p>Ghost_Dir is a web exploration tool developed in Node.js. It is capable of detecting hidden subdirectories on a web page, allowing information security professionals to perform penetration tests more efficiently and discreetly.</p>
 <p> Ghost_Dir is part of the Ghost ecosystem, which includes several other web exploration tools built in Node.js. All of these tools were created to help professionals in the field perform their tests safely and efficiently.</p>
 <div style="display: flex; justify-content: center;">
