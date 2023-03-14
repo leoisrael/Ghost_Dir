@@ -4,6 +4,8 @@ const { Command } = require('commander');
 const chalk = require('chalk');
 const fs = require('fs').promises;
 const fetch = require('node-fetch');
+const lodash = require('lodash');
+
 
 const program = new Command();
 
@@ -57,19 +59,29 @@ async function getSubdirectories(wordlistPath) {
 let targetUrlGlobal
 
 async function scanSubdirectories(targetUrl, subdirectories, options) {
-  targetUrlGlobal = targetUrl
+  // Arrays para armazenar os subdiretórios válidos, inválidos e falhados
   const validSubdirectories = [];
   const invalidSubdirectories = [];
   const failedSubdirectories = [];
 
+  // Expressão regular para verificar se a URL alvo começa com "http://" ou "https://"
   const urlRegex = /^https?:\/\//;
   if (!urlRegex.test(targetUrl)) {
     targetUrl = `http://${targetUrl}`;
   }
 
-  const requests = subdirectories.map((subdir) => {
+  // Cria uma função de solicitação throttledFetch que limita o número de solicitações por segundo
+  const throttledFetch = lodash.throttle(fetch, options.requestsPerSecond * 1000);
+
+  // Cria um array de promessas para solicitar cada subdiretório com a função throttledFetch
+  const requests = subdirectories.map(async (subdir) => {
     const url = `${targetUrl}/${subdir}`;
-    return fetch(url, { timeout: options.timeout })
+    // Gera um atraso aleatório entre o intervalo de tempo mínimo e máximo para evitar sobrecarregar o site alvo
+    const delay = Math.floor(Math.random() * (options.maxDelay - options.minDelay + 1)) + options.minDelay;
+    // Aguarda o atraso antes de fazer a solicitação
+    await new Promise(resolve => setTimeout(resolve, delay));
+    // Faz a solicitação usando a função throttledFetch
+    return throttledFetch(url, { timeout: options.timeout })
       .then((response) => {
         if (response.status === 404) {
           invalidSubdirectories.push(url);
@@ -83,12 +95,15 @@ async function scanSubdirectories(targetUrl, subdirectories, options) {
   });
 
   try {
+    // Espera que todas as solicitações sejam concluídas
     await Promise.all(requests);
   } catch (error) {
+    // Se ocorrer um erro, exibe uma mensagem de erro e sai do processo com um código de saída de 1
     console.error(chalk.red(`Erro na varredura de subdiretórios: ${error.message}`));
     process.exit(1);
   }
 
+  // Se houver subdiretórios com falha, exibe uma mensagem de aviso com as URLs e erros
   if (failedSubdirectories.length > 0) {
     console.warn(chalk.yellow('Algumas solicitações falharam:'));
     failedSubdirectories.forEach(({ url, error }) => {
@@ -96,9 +111,9 @@ async function scanSubdirectories(targetUrl, subdirectories, options) {
     });
   }
 
+  // Retorna os subdiretórios válidos, inválidos e falhados em um objeto
   return { validSubdirectories, invalidSubdirectories, failedSubdirectories };
 }
-
 
 function printResults({ validSubdirectories, invalidSubdirectories, failedSubdirectories }) {
   console.log(`Starting subdirectory scan on ${targetUrlGlobal} (${validSubdirectories.length + invalidSubdirectories.length} subdirectories found)...`);
