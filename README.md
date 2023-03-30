@@ -4,6 +4,7 @@
 <div style="display: flex; justify-content: center;">
     <img src="https://64.media.tumblr.com/f0fa43ee83285972d0f26ef8b1d1f1ce/tumblr_my0ckoNrhF1rkrwg5o1_400.gif" alt="Spooky Ghost" style="width: 300px; height: 300px;">
 </div>
+
 <h2 style="color: #EBC5D5; font-size: 2em;">💻 How it works</h2>
 <p style="color: white; font-size: 1.2em;">👻 Ghost_Dir operates as a "hidden" tool that can quietly navigate web page subdirectories without attracting attention from administrators. This allows for safer and less disruptive penetration testing. </p>
 <p style="color: white; font-size: 1.2em;">👀 Ghost_Dir can detect hidden subdirectories that other scanning tools may not be able to find, enabling the identification of possible vulnerabilities that other tests may have missed.</p>
