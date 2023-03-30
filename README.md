@@ -40,3 +40,5 @@
 <p style="color: white; font-size: 1.2em;">👻 Ghost_Dir is an open-source tool, and we welcome contributions from the community. If you would like to help improve the tool with bug fixes, new features, or other enhancements, please submit a pull request to the project repository.</p>
 <h2 style="color: #EBC5D5; font-size: 2em;">📧 Contact</h2>
 <p style="color: white; font-size: 1.2em;">If you have any questions, suggestions, or comments about Ghost_Dir, please feel free to contact us at <strong>israel.g.albuquerque@gmail.com</strong>. We appreciate your interest in our project!</p>
+
+
